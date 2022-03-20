@@ -1,0 +1,12 @@
+name: Devastation
+main: net.Conorsmine.com.Main
+version: 0.0.1
+api-version: 1.16
+
+commands:
+  magic:
+    description: Creates a special block with different abbilities, makes map creation easier.
+  reset:
+    description: Resets the map in which the players are playing.
+  start:
+    description: Starts the match.
