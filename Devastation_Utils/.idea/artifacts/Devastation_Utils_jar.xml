@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Devastation_Utils:jar">
+    <output-path>$PROJECT_DIR$/../MC server/plugins</output-path>
+    <root id="archive" name="Devastation_Utils.jar">
+      <element id="module-output" name="Devastation_Utils" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/java/net/Conorsmine/com/plugin.yml" />
+    </root>
+  </artifact>
+</component>

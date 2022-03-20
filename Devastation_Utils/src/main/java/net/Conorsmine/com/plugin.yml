@@ -1,0 +1,13 @@
+name: Devastation-Utils
+main: net.Conorsmine.com.Main
+version: 0.0.1
+
+commands:
+  node:
+    description: Changes the held item into a "Resource Node".
+  magic:
+    description: Changes the held item into a "Magic Block" for easier map creation.
+  gen:
+    description: Creates a fake version of the maze to view the size of it.
+  createFile:
+    description: Creates the config.json file for the current map.
