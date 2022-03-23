@@ -12,7 +12,6 @@ public class ResourceNode extends ResourceManager {
     private int totalChance;
     private final Location loc;
     private final LinkedList<NodeChance> nodeSpawnChanes;
-    public static ArrayList<ResourceNode> nodes = new ArrayList<>();
     private static final Random rand = new Random();
 
     public ResourceNode(Location loc, LinkedList<NodeChance> nodeSpawnChanes) {
@@ -22,8 +21,6 @@ public class ResourceNode extends ResourceManager {
         for (NodeChance chance : nodeSpawnChanes) {
             totalChance += chance.getChance();
         }
-
-        nodes.add(this);
     }
 
     @Override
