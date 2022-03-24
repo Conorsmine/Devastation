@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class Sidebar {
 
-    protected static TeamManager manager = WorldManager.getCurrentMap().getTeamManager();
+//    protected static TeamManager manager = WorldManager.getCurrentMap().getTeamManager();
 
     public static Scoreboard create() {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -22,14 +22,14 @@ public class Sidebar {
 
         Score dummy = setup.getScore("");
         Score timer = setup.getScore(ChatColor.GREEN + "00" + ChatColor.GOLD + ":" + ChatColor.GREEN + "30");
-        Score redLifes = setup.getScore(ChatColor.RED + "Remaining: " + ChatColor.RESET + manager.getRedTeam().getLifes());
-        Score blueLifes = setup.getScore(ChatColor.BLUE + "Remaining: " + ChatColor.RESET + manager.getBlueTeam().getLifes());
+//        Score redLifes = setup.getScore(ChatColor.RED + "Remaining: " + ChatColor.RESET + manager.getRedTeam().getLifes());
+//        Score blueLifes = setup.getScore(ChatColor.BLUE + "Remaining: " + ChatColor.RESET + manager.getBlueTeam().getLifes());
 
         dummy.setScore(6);
         timer.setScore(5);
         dummy.setScore(4);
-        redLifes.setScore(3);
-        blueLifes.setScore(2);
+//        redLifes.setScore(3);
+//        blueLifes.setScore(2);
 
         return scoreboard;
     }
@@ -42,7 +42,7 @@ public class Sidebar {
         }
     }
 
-    public static void setManager(TeamManager manager) {
-        Sidebar.manager = manager;
-    }
+//    public static void setManager(TeamManager manager) {
+//        Sidebar.manager = manager;
+//    }
 }

@@ -1,19 +1,14 @@
 package net.Conorsmine.com.WorldSetup;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MazeGenerator {
 
     private final int WIDTH, HEIGHT;
     private final boolean[] [] map;
     private final List<Cell> cellList = new ArrayList<>();
-    private Cell firstCell;
 
     protected final Random rand = new Random();
 
@@ -29,7 +24,7 @@ public class MazeGenerator {
     public boolean[] [] generate() {
         // Pick random cell
         int cellX = rand.nextInt(WIDTH), cellY = rand.nextInt(HEIGHT);
-        firstCell = new Cell(cellX * 2, cellY * 2);
+        Cell firstCell = new Cell(cellX * 2, cellY * 2);
         cellList.add(firstCell);
         map[cellX * 2] [cellY * 2] = true;
 
@@ -46,8 +41,6 @@ public class MazeGenerator {
             map[x + (dir[0] * 2)][y + (dir[1] * 2)] = true;
             cellList.add(new Cell(x + (dir[0] * 2), y + (dir[1] * 2)));
         }
-
-//        createImage("C:\\Users\\Conor\\Desktop\\Devestation\\src\\main\\resources\\");
         return map;
     }
 
@@ -68,36 +61,6 @@ public class MazeGenerator {
 
     private int lastIndex() {
         return cellList.size() - 1;
-    }
-
-    private void createImage(final String path) {
-        BufferedImage bImg = new BufferedImage(WIDTH * 2 + 3, HEIGHT * 2 + 3, BufferedImage.TYPE_INT_RGB);
-        Graphics2D plane = bImg.createGraphics();
-
-        // Background
-        plane.setColor(Color.BLACK);
-        plane.fillRect(0, 0, WIDTH * 2, HEIGHT * 2);
-
-
-        // Actual map
-        plane.setColor(Color.WHITE);
-        for (int x = 0; x < map.length; x++) {
-            for (int y = 0; y < map[x].length; y++) {
-                if (map[x] [y]) plane.drawRect(x + 1, y + 1, 0, 0);
-            }
-        }
-
-
-        plane.setColor(Color.pink);
-        plane.drawRect(firstCell.getCellX() + 1, firstCell.getCellY() + 1, 0, 0);
-
-        plane.dispose();
-
-        try {
-            ImageIO.write(bImg, "png", new File(path + "maze.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
 

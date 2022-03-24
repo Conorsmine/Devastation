@@ -1,12 +1,16 @@
 package net.Conorsmine.com.Utils;
 
 import net.Conorsmine.com.GameManagers.RespawnManager.NodeChance;
+import net.Conorsmine.com.Main;
+import net.Conorsmine.com.WorldSetup.Maps;
 import net.Conorsmine.com.WorldSetup.WorldManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import java.io.File;
 import java.io.FileReader;
 import java.util.*;
 
@@ -22,10 +26,10 @@ public class FileDeserializer {
     private int nodeRespawnTime;
     private HashMap<Location, LinkedList<NodeChance>> nodeBlocks;
 
-    public FileDeserializer(String mapFile) {
+    public FileDeserializer(Maps map) {
         try {
             JSONParser parser = new JSONParser();
-            FileReader reader = new FileReader(mapFile);
+            FileReader reader = new FileReader(Main.MAP_FOLDER_PATH + map.getMapFolder() + File.separator + "config.json");
             this.mainObj = (JSONObject) parser.parse(reader);
 
             reader.close();
@@ -47,25 +51,20 @@ public class FileDeserializer {
         JSONObject setup = (JSONObject) mainObj.get("setup");
         gameTime =  Math.toIntExact((Long) setup.get("game_time"));
         teamLifes =  Math.toIntExact((Long) setup.get("team_lifes"));
-        double[] mS = getSpawn((JSONObject) setup.get("map_spawn"));
-        mapSpawn = new Location(WorldManager.getCurrentWorld(), mS[0], mS[1], mS[2], (float)mS[3], 0);
+        mapSpawn = getSpawn((JSONObject) setup.get("map_spawn"));
     }
 
     private void getTeamsConfig() {
         JSONObject teams = (JSONObject) mainObj.get("teams");
 
-        double[] bS = getSpawn((JSONObject) teams.get("blue_spawn"));
-        blueSpawn = new Location(WorldManager.getCurrentWorld(), bS[0], bS[1], bS[2], (float)bS[3], 0);
-
-        double[] rS = getSpawn((JSONObject) teams.get("red_spawn"));
-        redSpawn = new Location(WorldManager.getCurrentWorld(), rS[0], rS[1], rS[2], (float)rS[3], 0);
+        blueSpawn = getSpawn((JSONObject) teams.get("blue_spawn"));
+        redSpawn = getSpawn((JSONObject) teams.get("red_spawn"));
     }
 
     private void getMazeConfig() {
         JSONObject mazeGen = (JSONObject) mainObj.get("maze_gen");
 
-        double[] mO = getLoc((JSONObject) mazeGen.get("maze_spawn"));
-        mazeOrigin = new Location(WorldManager.getCurrentWorld(), mO[0], mO[1], mO[2]);
+        mazeOrigin = getLoc((JSONObject) mazeGen.get("maze_spawn"));
         mazeWidth = Math.toIntExact((Long) mazeGen.get("maze_width"));
         mazeHeight = Math.toIntExact((Long) mazeGen.get("maze_height"));
         wallThiccness = Math.toIntExact((Long) mazeGen.get("maze_wall_thiccness"));
@@ -83,11 +82,10 @@ public class FileDeserializer {
             if (key.equals("respawn_time")) continue;
 
             JSONObject node = (JSONObject) nodes.get(key);
-            double[] nL = getLoc((JSONObject) node.get("resource_node_spawn"));
-            Location loc = new Location(WorldManager.getCurrentWorld(), nL[0], nL[1], nL[2]);
             int total = 0;
-            LinkedList<NodeChance> chanceList = new LinkedList<>();
 
+            // Get spawn chances
+            LinkedList<NodeChance> chanceList = new LinkedList<>();
             JSONObject chances = (JSONObject) node.get("chances");
             for (Object value : chances.keySet()) {
                 String mat = (String) value;
@@ -97,7 +95,11 @@ public class FileDeserializer {
                 total += Math.toIntExact((long) chances.get(mat));
             }
 
-            nodeBlock.put(loc, chanceList);
+
+            // Add to list for each location
+            for (Object pos : (JSONArray) node.get("positions_list")) {
+                nodeBlock.put(getLoc((JSONObject) pos), chanceList);
+            }
         }
 
         this.nodeBlocks = nodeBlock;
@@ -105,25 +107,16 @@ public class FileDeserializer {
 
 
 
-    private double[] getSpawn(JSONObject spawn) {
-        double[] info = new double[4];
-
-        info[0] = ((double) spawn.get("pos_x"));
-        info[1] = ((double) spawn.get("pos_y"));
-        info[2] = ((double) spawn.get("pos_z"));
-        info[3] = ((double) spawn.get("facing"));
-
-        return info;
+    private Location getSpawn(JSONObject spawn) {
+        return new Location(null, (Double) spawn.get("pos_x"), (Double) spawn.get("pos_y"), (Double) spawn.get("pos_z"), ((Double) spawn.get("facing")).floatValue(), 0);
     }
 
-    private double[] getLoc(JSONObject loc) {
-        double[] info = new double[4];
+    private Location getLoc(JSONObject loc) {
+        return new Location(null, ltd(loc.get("pos_x")), ltd(loc.get("pos_y")), ltd(loc.get("pos_z")));
+    }
 
-        info[0] = ((Long) loc.get("pos_x")).doubleValue();
-        info[1] = ((Long) loc.get("pos_y")).doubleValue();
-        info[2] = ((Long) loc.get("pos_z")).doubleValue();
-
-        return info;
+    private double ltd(Object val) {
+        return ((Long) val).doubleValue();
     }
 
 

@@ -2,7 +2,7 @@ package net.Conorsmine.com.GameManagers.Teams;
 
 import net.Conorsmine.com.GameManagers.Sidebar;
 import net.Conorsmine.com.Main;
-import net.Conorsmine.com.WorldSetup.MapWorld;
+import net.Conorsmine.com.WorldSetup.Map;
 import net.Conorsmine.com.WorldSetup.WorldManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,8 +25,9 @@ public class TeamManager {
     public static HashMap<UUID, Team> playerMap = new HashMap<>();
 
     public TeamManager() {
-        redTeam = new Team(WorldManager.getCurrentMap().getRedSpawn(), Teams.RED, WorldManager.getCurrentMap().getTeamLifes());
-        blueTeam = new Team(WorldManager.getCurrentMap().getBlueSpawn(), Teams.BLUE, WorldManager.getCurrentMap().getTeamLifes());
+        int maxLifes = WorldManager.getCurrentMap().getRedTeam().getMaxLifes();
+        redTeam = new Team(WorldManager.getCurrentMap().getRedTeam().getSpawn(), Teams.RED, maxLifes);
+        blueTeam = new Team(WorldManager.getCurrentMap().getBlueTeam().getSpawn(), Teams.BLUE, maxLifes);
         TeamManager.specTeam = new Team(WorldManager.getCurrentMap().getMapSpawn(), Teams.SPEC, 999);
     }
 
@@ -62,15 +63,15 @@ public class TeamManager {
     public static void onJoinEvent(PlayerJoinEvent ev) {
         Player p = ev.getPlayer();
         UUID uuid = p.getUniqueId();
-        MapWorld map = WorldManager.getCurrentMap();
+        Map map = WorldManager.getCurrentMap();
         if (playerMap.containsKey(uuid)) {
             Teams team = getPlayerTeamType(p);
 
             if (team == Teams.RED) {
-                p.teleport(map.getRedSpawn());
+                p.teleport(map.getRedTeam().getSpawn());
             }
             else {
-                p.teleport(map.getBlueSpawn());
+                p.teleport(map.getBlueTeam().getSpawn());
             }
 
 
@@ -110,13 +111,13 @@ public class TeamManager {
         if (getPlayerTeamType(p) != Teams.SPEC) return;
         if (p.getInventory().getItemInMainHand().getType() != Material.PAPER) return;
 
-        TeamManager manager = WorldManager.getCurrentMap().getTeamManager();
-        if (manager.getRedTeam().getTeamList().size() <= manager.getBlueTeam().getTeamList().size()) {
-            manager.getRedTeam().addPlayer(p);
-        }
-        else {
-            manager.getBlueTeam().addPlayer(p);
-        }
+//        TeamManager manager = WorldManager.getCurrentMap().getTeamManager();
+//        if (manager.getRedTeam().getTeamList().size() <= manager.getBlueTeam().getTeamList().size()) {
+//            manager.getRedTeam().addPlayer(p);
+//        }
+//        else {
+//            manager.getBlueTeam().addPlayer(p);
+//        }
 
         Teams team = TeamManager.playerMap.get(p.getUniqueId()).getTeam();
         p.sendMessage("Joined team " + team.getCol() + team.name());

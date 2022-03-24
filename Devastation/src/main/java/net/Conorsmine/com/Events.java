@@ -23,8 +23,8 @@ public class Events implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent ev) {
-        TeamManager.onJoinEvent(ev);
-        ev.getPlayer().setScoreboard(WorldManager.getCurrentMap().getGameBoard());
+//        TeamManager.onJoinEvent(ev);
+//        ev.getPlayer().setScoreboard(WorldManager.getCurrentMap().getGameBoard());
     }
 
     @EventHandler
@@ -67,6 +67,6 @@ public class Events implements Listener {
 
     @EventHandler
     public void onItemInteract(PlayerInteractEvent ev) {
-        TeamManager.onItemUse(ev);
+//        TeamManager.onItemUse(ev);
     }
 }

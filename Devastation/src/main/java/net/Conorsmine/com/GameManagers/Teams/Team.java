@@ -1,11 +1,10 @@
 package net.Conorsmine.com.GameManagers.Teams;
 
-import net.Conorsmine.com.WorldSetup.WorldManager;
+import com.nametagedit.plugin.NametagEdit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.awt.*;
 import java.util.LinkedList;
 
 public class Team {
@@ -28,8 +27,8 @@ public class Team {
     public void addPlayer(Player p) {
         this.teamList.add(p);
         TeamManager.playerMap.put(p.getUniqueId(), this);
-        p.setCustomName(teamCol + p.getName());
-        p.setCustomNameVisible(true);
+        p.setPlayerListName(teamCol + p.getName());
+        NametagEdit.getApi().setPrefix(p, "&" + teamCol.getChar());
     }
 
     public void removePlayer(Player p) {
